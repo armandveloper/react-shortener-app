@@ -1,7 +1,9 @@
+import { lazy, Suspense } from 'react';
 import styled from 'styled-components';
 import useShortener from '../hooks/useShortener';
 import Form from './Form';
-import ShortenResult from './ShortenResult';
+
+const ShortenResult = lazy(() => import('./ShortenResult'));
 
 const StyledShortener = styled.div`
 	margin-top: 5rem;
@@ -20,9 +22,9 @@ function Shortener() {
 		<StyledShortener>
 			<Form shortenURL={shortenURL} loading={isLoading} />
 			{error && <h2 className="result-error">{error}</h2>}
-			{!error && 'https://github.com/armcruz' && (
-				<ShortenResult url={'https://github.com/armcruz'} />
-			)}
+			<Suspense fallback={null}>
+				{!error && resultURL && <ShortenResult url={resultURL} />}
+			</Suspense>
 		</StyledShortener>
 	);
 }

@@ -63,14 +63,15 @@ function Form({ shortenURL, loading }: FormProps) {
 
 	const handleShorten = (e: FormEvent) => {
 		e.preventDefault();
+		if (loading) return;
 		const isURL = /https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{1,256}\.[a-zA-Z0-9()]{1,6}\b([-a-zA-Z0-9()!@:%_+.~#?&//=]*)/.test(
 			url
 		);
-		console.log(isURL);
 		if (!isURL) {
 			return setError('Enter a valid URL');
 		}
 		shortenURL(url.trim().toLowerCase());
+		setURL('');
 	};
 
 	return (

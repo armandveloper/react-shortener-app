@@ -1,8 +1,5 @@
 import { useState } from 'react';
-
-export interface ShortenURLResponse {
-	result_url: string;
-}
+import { ShortenURLResponse } from '../interfaces/shorten-url.interface';
 
 const useShortener = (): [
 	string,
@@ -16,16 +13,22 @@ const useShortener = (): [
 
 	const shortenURL = async (url: string) => {
 		setLoading(true);
-		const fetchURL = 'https://api-ssl.bitly.com/v4/shorten';
+		const fetchURL = 'https://t.ly/api/v1/link/shorten';
 		try {
 			const resp = await fetch(fetchURL, {
 				method: 'POST',
-				body: JSON.stringify({ long_url: window.encodeURI(url) }),
+				headers: {
+					'Content-Type': 'application/json',
+					Accept: 'application/json',
+				},
+				body: JSON.stringify({
+					long_url: window.encodeURI(url),
+					api_token: process.env.API_TOKEN,
+				}),
 			});
-			console.log(resp);
+			if (resp.status !== 200) throw new Error(resp.statusText);
 			const data: ShortenURLResponse = await resp.json();
-			console.log(data);
-			// setShortenedURL(data.result_url);
+			setShortenedURL(data.short_url);
 		} catch (err) {
 			console.log(err);
 			setError(

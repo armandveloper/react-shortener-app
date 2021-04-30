@@ -18,20 +18,29 @@ const StyledShortenResult = styled.div`
 		padding: 2rem;
 	}
 `;
-const ShortenURL = styled.p`
+const ShortenURL = styled.a`
 	flex: 1;
+	color: #42a5f5;
 	font-size: 1.6rem;
 	margin: 0;
+	text-decoration: none;
 `;
 
 const BtnIcon = styled.button`
 	flex: 0 0 5rem;
 	background: none;
+
 	border: none;
 	cursor: pointer;
 	margin: 0;
 	padding: 0;
 	position: relative;
+	svg {
+		transition: stroke 0.3s ease;
+	}
+	&:hover svg {
+		stroke: #42a5f5;
+	}
 `;
 
 const Feedback = styled.span`
@@ -67,13 +76,18 @@ function ShortenResult({ url }: ShortenResultProps) {
 
 	return (
 		<StyledShortenResult>
-			<ShortenURL>{url}</ShortenURL>
-			<BtnIcon onClick={() => copyURL(url).then(showFeedback)}>
+			<ShortenURL href={url} target="_blank" rel="noopener noreferrer">
+				{url}
+			</ShortenURL>
+			<BtnIcon
+				onClick={() => copyURL(url).then(showFeedback)}
+				title="Copy URL"
+			>
 				<Feedback ref={feedbackRef}>Copied!</Feedback>
 				<Copy size={30} color="#fff" />
 			</BtnIcon>
 			{window.navigator.share !== undefined && (
-				<BtnIcon onClick={() => shareURL(url)}>
+				<BtnIcon onClick={() => shareURL(url)} title="Share URL">
 					<Share size={30} color="#fff" />
 				</BtnIcon>
 			)}
