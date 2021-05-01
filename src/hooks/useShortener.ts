@@ -11,8 +11,11 @@ const useShortener = (): [
 	const [isLoading, setLoading] = useState(false);
 	const [error, setError] = useState<string | null>(null);
 
+	const apiToken = process.env.REACT_APP_API_TOKEN;
+
 	const shortenURL = async (url: string) => {
 		setLoading(true);
+		console.log(apiToken);
 		const fetchURL = 'https://t.ly/api/v1/link/shorten';
 		try {
 			const resp = await fetch(fetchURL, {
@@ -22,10 +25,11 @@ const useShortener = (): [
 					Accept: 'application/json',
 				},
 				body: JSON.stringify({
-					long_url: window.encodeURI(url),
-					api_token: process.env.API_TOKEN,
+					long_url: url,
+					api_token: apiToken,
 				}),
 			});
+
 			if (resp.status !== 200) throw new Error(resp.statusText);
 			const data: ShortenURLResponse = await resp.json();
 			setShortenedURL(data.short_url);

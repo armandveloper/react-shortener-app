@@ -12,18 +12,25 @@ const StyledShortenResult = styled.div`
 	background-color: #15181c;
 	margin-top: 4rem;
 	padding: 1rem;
+	/* position: relative; */
 	display: flex;
 	align-items: center;
 	@media (min-width: 37.5em) {
 		padding: 2rem;
 	}
 `;
-const ShortenURL = styled.a`
+const ShortenURL = styled.input`
+	background: none;
+	border: none;
+	cursor: pointer;
+	font: inherit;
 	flex: 1;
 	color: #42a5f5;
 	font-size: 1.6rem;
 	margin: 0;
-	text-decoration: none;
+	&:focus {
+		outline: none;
+	}
 `;
 
 const BtnIcon = styled.button`
@@ -52,7 +59,7 @@ const Feedback = styled.span`
 	opacity: 0;
 	transform: translateX(-12.5%) translateY(1rem);
 	position: absolute;
-	bottom: calc(100% + 1rem);
+	bottom: calc(100% + 2rem);
 	left: 0;
 	z-index: 100;
 	transition: opacity 0.3s ease, transform 0.3s ease;
@@ -64,6 +71,7 @@ const Feedback = styled.span`
 
 function ShortenResult({ url }: ShortenResultProps) {
 	const feedbackRef = useRef<HTMLSpanElement>(null!);
+	const urlRef = useRef<HTMLInputElement>(null!);
 
 	const hideFeedback = () => {
 		feedbackRef.current.classList.remove('show');
@@ -74,13 +82,21 @@ function ShortenResult({ url }: ShortenResultProps) {
 		setTimeout(hideFeedback, 2000);
 	};
 
+	const visitURL = () => {
+		window.open(url, '_blank', 'noopener,noreferrer');
+	};
+
 	return (
 		<StyledShortenResult>
-			<ShortenURL href={url} target="_blank" rel="noopener noreferrer">
-				{url}
-			</ShortenURL>
+			<ShortenURL
+				onClick={visitURL}
+				type="url"
+				ref={urlRef}
+				readOnly={true}
+				value={url}
+			/>
 			<BtnIcon
-				onClick={() => copyURL(url).then(showFeedback)}
+				onClick={() => copyURL(url, urlRef.current).then(showFeedback)}
 				title="Copy URL"
 			>
 				<Feedback ref={feedbackRef}>Copied!</Feedback>

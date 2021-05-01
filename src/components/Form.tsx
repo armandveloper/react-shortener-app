@@ -72,6 +72,7 @@ function Form({ shortenURL, loading }: FormProps) {
 		}
 		shortenURL(url.trim().toLowerCase());
 		setURL('');
+		setError('');
 	};
 
 	return (

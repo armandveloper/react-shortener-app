@@ -4,6 +4,8 @@ import Shortener from './Shortener';
 
 const Title = styled.h1`
 	font-size: 3.6rem;
+	font-weight: 500;
+	letter-spacing: 0.5px;
 	margin-top: 5rem;
 	margin-bottom: 1rem;
 	text-align: center;
